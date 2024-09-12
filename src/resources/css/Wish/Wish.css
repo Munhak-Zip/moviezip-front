@@ -9,7 +9,7 @@ body {
 }
 
 .mobile {
-    width: 360px; /* 너비 설정 */
+    width: 80%; /* 너비 설정 */
     margin: 0 auto; /* 가로 중앙 배치 */
     background-color: black;
 }
