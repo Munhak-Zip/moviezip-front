@@ -8,11 +8,11 @@ body {
     font-variation-settings: "slnt" 0, "FLAR" 0, "VOLM" 0;
 }
 
-.mobile {
-    width: 80%; /* 너비 설정 */
-    margin: 0 auto; /* 가로 중앙 배치 */
-    background-color: black;
-}
+/*.mobile {*/
+/*    width: 80%; !* 너비 설정 *!*/
+/*    margin: 0 auto; !* 가로 중앙 배치 *!*/
+/*    background-color: black;*/
+/*}*/
 
 .div1 {
     margin: 0;
@@ -85,9 +85,9 @@ body {
     flex-wrap: wrap;
 }
 
-.movie {
-    margin-right: 20px;
-}
+/*.movie {*/
+/*    margin-right: 20px;*/
+/*}*/
 
 .navigation-buttons {
     display: flex;
@@ -99,7 +99,7 @@ body {
 
 .new-movies {
     display: flex;
-    justify-content: center;
+    /*justify-content: center;*/
     align-items: center;
     overflow-x: auto;
 }

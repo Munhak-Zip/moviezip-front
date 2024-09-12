@@ -49,9 +49,9 @@ body {
     flex-wrap: wrap;
 }
 
-.movie {
-    margin-right: 20px; /* 각 영화 사이의 간격을 조절 */
-}
+/*.movie {*/
+/*    margin-right: 20px; !* 각 영화 사이의 간격을 조절 *!*/
+/*}*/
 
 .search-header {
     display: flex;

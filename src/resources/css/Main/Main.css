@@ -1,8 +1,5 @@
-@import url('https://fonts.googleapis.com/css2?family=Commissioner:wght@100..900&family=Inter&display=swap');
-
-
 @media (max-width: 768px) {
-    /* 홈 페이지의 제목 스타일 변경 */
+    /* 공통 스타일 */
     body {
         background-color: black;
         font-family: "Commissioner", sans-serif;
@@ -16,7 +13,6 @@
 
     .div1 {
         margin: 0;
-        /*max-width: 360px;*/
         max-height: 800vh;
         margin-left: auto;
         margin-right: auto;
@@ -25,41 +21,47 @@
         text-align: center;
     }
 
-    .div1 Header a{
+    .div1 Header a {
         font-size: 40px;
-         text-decoration: none;
-         color: #D1003F;
-     }
+        text-decoration: none;
+        color: #D1003F;
+    }
 
+    /* 최신영화, 추천영화, 보관함 공통 스타일 */
     .new, .recommend, .wish {
         text-align: left;
         font-size: 18px;
         font-weight: bold;
-    }
-    .next-button{
-        width: 20px; /* 이미지의 너비를 조절합니다. */
-        height: auto; /* 높이를 자동으로 설정하여 비율을 유지합니다. */
-        margin-left: 250px;
-    }
-    .star {
-        margin-left: 40px;
-        width: 20px;
+        margin-bottom: 10px;
     }
 
-    .movie .Poster-img {
-        width: 131px;
-        height: 20vh;
+    /* 공통 영화 리스트 스타일 */
+    .new-movies, .recommend-movies, .wish-movies {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-around;
     }
 
-    .new-movies {
-        display: flex; /* 영화들을 수평으로 정렬합니다. */
-    }
     .movie {
-        margin-right: 20px; /* 각 영화 사이의 간격을 조절합니다. */
+        margin-right: 10px;
+        text-align: center;
+        margin-bottom: 20px;
+    }
+
+    .movie img {
+        width: 120px;
+        height: 20vh;
+        object-fit: cover;
+        border-radius: 5px;
+    }
+
+    .star {
+        margin-left: 10px;
+        width: 15px;
     }
 }
+
 @media (min-width: 769px) {
-    /* 홈 페이지의 제목 스타일 변경 */
     body {
         background-color: black;
         font-family: "Commissioner", sans-serif;
@@ -73,7 +75,6 @@
 
     .div1 {
         margin: 0;
-        /*max-width: 360px;*/
         max-height: 800px;
         margin-left: auto;
         margin-right: auto;
@@ -82,52 +83,86 @@
         text-align: center;
     }
 
-    .div1 Header a{
+    .div1 Header a {
         font-size: 40px;
         text-decoration: none;
         color: #D1003F;
     }
 
-    .new, .recommend {
+    #div1_input {
+        display: flex;
+    }
+
+    /* 최신영화, 추천영화, 보관함 공통 스타일 */
+    .new,.recommend, .wish {
         text-align: left;
         font-size: 18px;
         font-weight: bold;
+        margin-bottom: 10px;
     }
-    .next-button{
-        width: 20px; /* 이미지의 너비를 조절합니다. */
-        height: auto; /* 높이를 자동으로 설정하여 비율을 유지합니다. */
-        margin-left: 250px;
+    /*.recommend {*/
+    /*    text-align: left;*/
+    /*    font-size: 18px;*/
+    /*    font-weight: bold;*/
+    /*    margin-bottom: 10px;*/
+    /*    position: relative;*/
+    /*    right: 30px;*/
+    /*    width: 780px;*/
+    /*}*/
+
+
+    /* 공통 영화 리스트 스타일 */
+    .new-movies, .recommend-movies, .wish-movies {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-between;
+    }
+
+    .movie {
+        /*margin-right: 20px;*/
+        text-align: center;
+        margin-bottom: 20px;
+        cursor: pointer;
     }
 
     .movie img {
         width: 131px;
-        height: 92px;
+        height: 180px;
+        object-fit: cover;
+        border-radius: 5px;
     }
 
-    .new-movies {
-        display: flex; /* 영화들을 수평으로 정렬합니다. */
+    .recommend > .new-movies > .movie{
+        width: 220px;
     }
-    .movie {
-        margin-right: 20px; /* 각 영화 사이의 간격을 조절합니다. */
-        cursor: pointer;
+
+    .star {
+        margin-left: 10px;
+        width: 15px;
+    }
+
+    .next-button {
+        width: 20px;
+        height: auto;
+        margin-left: 250px;
     }
 }
 
 .search-button {
     background-color: #D1003F;
-    color: white; /* 글자 색상 */
+    color: white;
     width: 70px;
-    height: 40px;
-    border-radius: 10px; /* 둥글기 정도 조절 */
-    border: none; /* 기본 테두리 제거 (선택 사항) */
-    cursor: pointer; /* 마우스 포인터 변화 */
-    display: flex; /* Flexbox 사용 */
-
-}
-.search-type{
-    width: 300px;
     height: 40px;
     border-radius: 10px;
     border: none;
-    margin-right: 10px; /* 버튼과의 간격 조정 */
+    cursor: pointer;
+    display: flex;
+}
+
+.search-type {
+    width: 500px;
+    height: 40px;
+    border-radius: 10px;
+    border: none;
+    margin-right: 10px;
 }

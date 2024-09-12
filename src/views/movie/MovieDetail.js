@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, {useState, useEffect} from 'react';
 import '../../resources/css/Movie/MovieDetail.css';
 import bookmark from '../../resources/img/Movie/bookmark.png';
 import bookmarkC from '../../resources/img/Movie/bookmarkC.png'; // New bookmarked icon for movie
@@ -7,11 +7,11 @@ import star from '../../resources/img/Movie/star.png';
 import starN from '../../resources/img/Movie/star_unclick.png';
 import back from '../../resources/img/Movie/back.png';
 import axios from 'axios';
-import { useParams, useNavigate } from 'react-router-dom';
+import {useParams, useNavigate} from 'react-router-dom';
 
 const MovieDetail = () => {
     const navigate = useNavigate();
-    const { mvId } = useParams();
+    const {mvId} = useParams();
     const [movieDetails, setMovieDetails] = useState(null);
     const [starRating, setStarRating] = useState(0); // Initial star rating set to 0
     const [isGoodClicked, setIsGoodClicked] = useState(true);
@@ -101,7 +101,7 @@ const MovieDetail = () => {
     };
 
     const showReserve = () => {
-        navigate(`/movie/showReserveForm/${mvId}`, { state: movieDetails });
+        navigate(`/movie/showReserveForm/${mvId}`, {state: movieDetails});
     };
 
     const toggleBookmark = () => {
@@ -119,7 +119,7 @@ const MovieDetail = () => {
             });
     };
 
-    const Critic = ({ name, stars, reviewTitle, reviewContent }) => {
+    const Critic = ({name, stars, reviewTitle, reviewContent}) => {
         const renderStars = (count, totalStars) => {
             const starImages = [];
             for (let i = 0; i < totalStars; i++) {
@@ -139,12 +139,15 @@ const MovieDetail = () => {
         return (
             <div className="critic">
                 <div className="critic_name">
-                    {name}
+                    <div className="star_criticName">
+                        {name}
+                    </div>
                     <div className="star_critic">
                         {renderStars(stars, 5)}
                     </div>
                     <div className="bookmark_critic">
-                        <img src={isCriticBookmarked ? bookmarkCritic : bookmark} width={35} height={35} onClick={() => setIsCriticBookmarked(!isCriticBookmarked)} />
+                        <img src={isCriticBookmarked ? bookmarkCritic : bookmark} width={35} height={35}
+                             onClick={() => setIsCriticBookmarked(!isCriticBookmarked)}/>
                     </div>
                 </div>
                 <div className="critic_review_mid">
@@ -164,60 +167,66 @@ const MovieDetail = () => {
 
     return (
         <div className="mobile">
-            <div className="back_img">
-                <img src={back} width={30} height={30} alt="Back" onClick={() => navigate(-1)} />
-            </div>
-            <div className="bookmarkMovie">
-                <img
-                    src={isMovieBookmarked ? bookmarkC : bookmark}
-                    width={45}
-                    height={45}
-                    alt="Bookmark"
-                    onClick={toggleBookmark}
-                />
-            </div>
-            <div className="imgMovie">
-                <img src={movieDetails.mvImg} width={250} height={350} alt={movieDetails.mvTitle} />
-            </div>
-            <div className="title">
-                {movieDetails.mvTitle}
-            </div>
-            <div className="starGroup">
-                {[...Array(5)].map((_, index) => (
-                    <img
-                        key={index}
-                        className="star_image"
-                        src={index < movieDetails.mvStar ? star : starN}
-                        width={30}
-                        height={30}
-                    />
-                ))}
-                <div className="star_text">
-                    ({movieDetails.mvStar})
-                </div>
-            </div>
-            <div className="movie_text">
-                {movieDetails.mvDetail}
-            </div>
-            <div className="category">
-                <div className="category_box">
-                    <div className="category_text">
-                        #{movieDetails.genre2}
-                    </div>
-                </div>
-                <div className="category_box">
-                    <div className="category_text">
-                        #{movieDetails.openDate}
-                    </div>
-                </div>
-                <div className="category_box">
-                    <div className="category_text">
-                        #{movieDetails.mvDirector}
-                    </div>
-                </div>
-            </div>
-            <button className="reservation_btn" onClick={showReserve}>예매하기</button>
 
+            <div className={"movie_detail"}>
+                <div className="back_img">
+                    <img src={back} width={30} height={30} alt="Back" onClick={() => navigate(-1)}/>
+                </div>
+                <div id={"movie_detail_imgPart"}>
+                    <div className="bookmarkMovie">
+                        <img
+                            src={isMovieBookmarked ? bookmarkC : bookmark}
+                            width={45}
+                            height={45}
+                            alt="Bookmark"
+                            onClick={toggleBookmark}
+                        />
+                    </div>
+                    <div className="imgMovie">
+                        <img src={movieDetails.mvImg} width={250} height={350} alt={movieDetails.mvTitle}/>
+                    </div>
+                </div>
+                <div id={"movie_detail_infoPart"}>
+                    <div className="title">
+                        {movieDetails.mvTitle}
+                    </div>
+                    <div className="starGroup">
+                        {[...Array(5)].map((_, index) => (
+                            <img
+                                key={index}
+                                className="star_image"
+                                src={index < movieDetails.mvStar ? star : starN}
+                                width={30}
+                                height={30}
+                            />
+                        ))}
+                        <div className="star_text">
+                            ({movieDetails.mvStar})
+                        </div>
+                    </div>
+                    <div className="movie_text">
+                        {movieDetails.mvDetail}
+                    </div>
+                    <div className="category">
+                        <div className="category_box">
+                            <div className="category_text">
+                                #{movieDetails.genre2}
+                            </div>
+                        </div>
+                        <div className="category_box">
+                            <div className="category_text">
+                                #{movieDetails.openDate}
+                            </div>
+                        </div>
+                        <div className="category_box">
+                            <div className="category_text">
+                                #{movieDetails.mvDirector}
+                            </div>
+                        </div>
+                    </div>
+                    <button className="reservation_btn" onClick={showReserve}>예매하기</button>
+                </div>
+            </div>
             <div className="starGroup">
                 {[...Array(5)].map((_, index) => (
                     <img
@@ -230,28 +239,28 @@ const MovieDetail = () => {
                     />
                 ))}
             </div>
-            <input className="review_text" type="text" placeholder="리뷰를 작성해주세요" value={reviewText} onChange={handleReviewChange} />
-            <button className="review_btn" onClick={handleReviewSubmit}>작성</button>
-            <div className="expect">
-                평점요약
+            <div className={"review_detail"}>
+                <div>
+                    <input className="review_text" type="text" placeholder="리뷰를 작성해주세요" value={reviewText}
+                           onChange={handleReviewChange}/>
+                    <button className="review_btn" onClick={handleReviewSubmit}>작성</button>
+
+                </div>
+                <div className={"critic_review_wrap"}>
+                    <div className="critic_title">
+                        평론가 리뷰
+                    </div>
+                    {critics.map((critic, index) => (
+                        <Critic
+                            key={index}
+                            name={critic.writer}
+                            stars={critic.rvStar}
+                            reviewTitle={critic.rvTitle}
+                            reviewContent={critic.content}
+                        />
+                    ))}
+                </div>
             </div>
-            <button className={isGoodClicked ? "btn_good" : "btn_good_not"} onClick={handleGoodClick}>높은 평점</button>
-            <button className={isBadClicked ? "btn_bad" : "btn_bad_not"} onClick={handleBadClick}>낮은 평점</button>
-            <div className="expect_box">
-                <b className="expect_text">ㅇㅇ님은 이거 이거 좋아해서 영화명은 3점일것입니다~</b>
-            </div>
-            <div className="critic_title">
-                평론가 리뷰
-            </div>
-            {critics.map((critic, index) => (
-                <Critic
-                    key={index}
-                    name={critic.writer}
-                    stars={critic.rvStar}
-                    reviewTitle={critic.rvTitle}
-                    reviewContent={critic.content}
-                />
-            ))}
         </div>
     );
 }

@@ -1,17 +1,17 @@
-.mobile {
-    width: 80%; /* 너비 설정 */
-    margin: 0 auto; /* 가로 중앙 배치 */
-    background-color: black;
+
+.header {
+     width: 1300px;
+     margin: 0 auto;
+     background-color: black;
+     margin-top: 30px;
+
 }
-.header{
-    margin-bottom: -25px;
-    display: flex;
-}
+
 .title_style{
     font-weight: bold;
     font-size: 35px;
     color: #D1003F;
-    margin-left: 7px;
+    margin-left: 100px;
     cursor: pointer;
 }
 .all{
