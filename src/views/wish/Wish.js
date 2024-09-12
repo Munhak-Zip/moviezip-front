@@ -14,9 +14,9 @@ const Wish = () => {
     const [reviews, setReviews] = useState([]);
     const [myReviews, setMyReviews] = useState([]);
 
-    const moviesPerPage = 2;
-    const reviewsPerPage = 2;
-    const myReviewsPerPage = 2;
+    const moviesPerPage = 3;
+    const reviewsPerPage = 3;
+    const myReviewsPerPage = 3;
 
     useEffect(() => {
         axios.get('http://localhost:8080/wish/movies', { withCredentials: true })

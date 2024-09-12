@@ -1,126 +1,174 @@
-.App{
-    margin: 20px auto;
+/* 전역 스타일 */
+body {
+    background-color: #121212; /* 어두운 배경색 */
+    font-family: 'Commissioner', sans-serif;
+    color: #FFFFFF; /* 기본 텍스트 색상 */
+    margin: 0;
+    padding: 0;
 }
-.wrap{
-    width: 345px;
+
+/* 전체 래퍼 */
+.wrap {
+    width: 100%;
     height: 100vh;
     margin: 0 auto;
-    background-color: black;
-    color: white;
-}
-.header{
-    height: 100px;
-}
-.content_wrap{
-    width: 95%;
-    margin: 0 auto;
-    position: relative;
-    top:15%;
 }
 
-.views_name{
-    font-size: 30px;
-    font-weight: bolder;
+/* 콘텐츠 래퍼 */
+.content_wrap {
+    width: 70%;
+    max-width: 1200px;
+    margin: 0 auto;
+    margin-top: 4%;
+    padding: 50px;
+    background-color: #1F1F1F; /* 콘텐츠 배경 색상 */
+    border-radius: 10px; /* 모서리 둥글게 */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5); /* 그림자 효과 */
 }
-.article{
+
+/* 헤더 */
+.header {
+    height: 80px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #1D1D1D; /* 헤더 배경 색상 */
+    color: #D1003F; /* 헤더 텍스트 색상 */
+    font-size: 24px;
+    font-weight: bold;
+}
+
+/* 제목 */
+.views_name {
+    font-size: 32px;
+    font-weight: bolder;
+    margin-bottom: 20px;
+    text-align: center; /* 중앙 정렬 */
+}
+
+/* 사용자 정보 영역 */
+.mypage-userinfo {
+    margin-bottom: 40px;
+}
+
+/* 개별 항목 */
+.article {
     display: flex;
     flex-direction: row;
-    margin-bottom: 30px;
-    height: 20px;
-}
-.article:first-child{
-    margin-top: 40px;
-}
-.input_info{
-    border: none; /* 기본 border 제거 */
-    border-bottom: 2px solid white; /* 하단 border만 추가 */
-    background-color: black; /* 배경색 설정 */
-    color: white; /* 텍스트 색상 설정 */
-    outline: none; /* 포커스 효과 제거 */
+    align-items: center;
+    margin-bottom: 20px;
 }
 
-.index{
-    width: 165px;
-    font-size: 12px;
+/* 인덱스 텍스트 */
+.index {
+    width: 150px;
+    font-size: 16px;
+    font-weight: bold;
 }
 
-.change_btn{
-    margin-left: 5px;
-    border: 3px solid white;
-    border-radius: 40px;
-    background-color: black;
-    color: white;
-    font-size: 10px;
+/* 입력 정보 */
+.input_info {
+    flex: 1;
+    border: none;
+    border-bottom: 2px solid #FFFFFF;
+    background-color: #1F1F1F;
+    color: #FFFFFF;
+    outline: none;
+    padding: 8px;
+    font-size: 16px;
+}
+
+/* 변경 버튼 */
+.change_btn {
+    margin-left: 10px;
+    border: 2px solid #D1003F;
+    border-radius: 20px;
+    background-color: #1D1D1D;
+    color: #FFFFFF;
+    font-size: 14px;
     width: 100px;
-    position: relative;
-    bottom: 20px;
-}
-.change_btn > p{
-    position: relative;
-    bottom: 16px;
-}
-.change_btn:hover{
-    border: 3px solid red;
-}
-#new_pw {
-    width: fit-content;
-}
-#new_pw-input{
-    position: relative;
-    left: 26px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: background-color 0.3s, border-color 0.3s;
 }
 
-/*좋아하는 장르*/
-.mypage-like{
+/* 변경 버튼 호버 효과 */
+.change_btn:hover {
+    border-color: #D1003F;
+    background-color: #D1003F;
+    color: #FFFFFF;
+}
+
+/* 장르 선택 영역 */
+.mypage-like {
     font-size: 20px;
     font-weight: bold;
-    margin-top: 60px;
-}
-.mypage-like > p{
-    margin-bottom: 50px;
+    margin-top: 40px;
+    text-align: center;
 }
 
 .radio_btn {
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
     gap: 10px;
-}
-#radio_btn{
-    margin: 10px;
-    font-size: 12px;
-    display: flex;
-    flex-direction: column;
+    margin-top: 20px;
 }
 
-
-label{
-    position: relative;
-    bottom: 2.5px;
-}
-#ganre-change{
-    margin-top: 30px;
-    width: 300px;
-    height: 40px;
-    font-size: 18px;
-
-}
-.genre_change{
-    width: 35px;
+#radio_btn {
+    font-size: 14px;
 }
 
-/*예매 내역*/
+label {
+    display: block;
+    text-align: center;
+}
 
-.reservation_info{
+/* 장르 변경 버튼 */
+#ganre-change {
+    margin-top: 20px;
     width: 100%;
-    height: 300px;
+    height: 45px;
+    font-size: 16px;
+    background-color: #D1003F;
+    color: #FFFFFF;
+    border: none;
+    border-radius: 20px;
+    cursor: pointer;
+    transition: background-color 0.3s;
 }
-#reservation_info{
-    width: 100%;
-    margin-top: 50px;
-    margin-bottom: 30px;
 
+#ganre-change:hover {
+    background-color: #A0002A;
 }
-th{
-    position: relative;
-    right: 23px;
+
+/* 예매 내역 테이블 */
+.reservation_info {
+    width: 100%;
+    margin-top: 40px;
+}
+
+#reservation_info {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+th, td {
+    padding: 10px;
+    text-align: left;
+}
+
+th {
+    background-color: #1D1D1D;
+    color: #D1003F;
+}
+
+td {
+    background-color: #2D2D2D;
+}
+
+tr:nth-child(even) td {
+    background-color: #3D3D3D;
 }

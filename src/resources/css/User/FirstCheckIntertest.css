@@ -42,6 +42,7 @@ body {
     grid-template-columns: repeat(5, 1fr); /* 5개씩 열로 정렬 */
     gap: 10px;
     width: 100%; /* 선택박스가 전체 너비를 차지하도록 설정 */
+    margin-left: 5%;
 }
 
 .radio_btn div {
