@@ -1,6 +1,7 @@
 import React from 'react';
 import {Link, useNavigate} from "react-router-dom";
 
+//주석
 const Movie=() =>{
     return (
         <div>
