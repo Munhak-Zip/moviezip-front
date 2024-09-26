@@ -20,7 +20,7 @@ const Login = () => {
         const checkAuthentication = async () => {
             try {
                 const response = await axiosInstance.get("/auth-check", { withCredentials: true });
-                if (response.data) {
+                if (response.data == 200) {
                     alert("이미 로그인된 사용자입니다.");
                     navigate("/"); // Redirect to home or any other page
                 }
@@ -40,7 +40,7 @@ const Login = () => {
         };
 
         try {
-            const response = await axiosInstance.post("/loginProc", qs.stringify(loginDTO), {
+            const response = await axiosInstance.post("/loginProc", loginDTO, {
 
                 headers: {
                     'Content-Type': 'application/x-www-form-urlencoded',
@@ -48,12 +48,12 @@ const Login = () => {
                 withCredentials: true, // 쿠키 기반 인증 정보를 포함
             });
             if (response.status === 200) {
-               
+
                 const userIdResponse = await axios.get('/getId');
                 if (userIdResponse.status === 200) {
                     const userId = userIdResponse.data; // 서버에서 받은 userId
-                    // alert(userId);
-
+                    alert(userId);
+                    localStorage.setItem("userId",userId);
                     // userId를 사용해 Interest 존재 여부 확인
                     const interestResponse = await axios.post('/checkExistInterestById', { id: userId });
 

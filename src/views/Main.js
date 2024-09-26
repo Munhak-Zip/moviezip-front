@@ -1,10 +1,10 @@
-import React, { useEffect, useState } from 'react';
-import { BrowserRouter, Routes, Route, useNavigate } from "react-router-dom";
+import React, {useEffect, useState} from 'react';
+import {BrowserRouter, Routes, Route, useNavigate} from "react-router-dom";
 import '../resources/css/Main/Main.css';
 import Next from '../resources/next.png';
 import Star from '../resources/img/Movie/star.png';
 import axios from 'axios';
-import { Oval } from 'react-loader-spinner';
+import {Oval} from 'react-loader-spinner';
 import Modal from '../components/Modal/Modal';
 import Interest from '../components/interest/Interest';
 
@@ -26,6 +26,7 @@ function Header(props) {
         </header>
     );
 }
+
 
 function Loading() {
     const loadingStyle = {
@@ -96,11 +97,27 @@ function App() {
     const [searchResults, setSearchResults] = useState([]);
     const [wishMovies, setWishMovies] = useState([]);
     const [isLoading, setIsLoading] = useState(true); // 로딩 상태 추가
+    const [isLoggedIn, setIsLoggedIn] = useState(false); // 로그인 상태 관리
+
+    useEffect(() => {
+        const userId = localStorage.getItem('userId');
+
+        // 로그인 여부 확인
+        if (userId) {
+            setIsLoggedIn(true);
+            fetchRecommendations();
+            fetchRecentMovies();
+            fetchWishMovies();
+        } else {
+            setIsLoggedIn(false);
+            setIsLoading(false); // 로그인이 되어 있지 않으면 로딩 상태 해제
+        }
+    }, []);
 
     const topics = [
-        { id: 1, title: '보관함', body: 'wish is...' },
-        { id: 2, title: '마이페이지', body: 'myPage...' },
-        { id: 3, title: '로그아웃', body: 'logOut...' },
+        {id: 1, title: '보관함', body: 'wish is...'},
+        {id: 2, title: '마이페이지', body: 'myPage...'},
+        {id: 3, title: '로그아웃', body: 'logOut...'},
     ];
 
     const onChange = (event) => {
@@ -110,31 +127,32 @@ function App() {
     const fetchRecommendations = () => {
         //const userId = 3; // 예시로 사용자 ID를 지정
         const userId = localStorage.getItem('userId');
-        axios
-            .get('/main/recommend', {
-                params: {
-                    userId: userId,
-                },
-            })
-            .then((response) => {
-                const recommendationResults = response.data;
-                setRecommendationResults(recommendationResults);
-            })
-            .catch((error) => {
-                console.error('Request failed:', error);
-            })
-            .finally(() => {
-                setIsLoading(false); // 데이터 요청 완료 시 로딩 상태 해제
-            });
+        if (userId) {
+            axios
+                .get('/main/recommend', {
+                    params: {
+                        userId: userId,
+                    },
+                })
+                .then((response) => {
+                    const recommendationResults = response.data;
+                    setRecommendationResults(recommendationResults);
+                })
+                .catch((error) => {
+                    console.error('Request failed:', error);
+                })
+                .finally(() => {
+                    setIsLoading(false); // 데이터 요청 완료 시 로딩 상태 해제
+                });
+        }
     };
 
     const fetchRecentMovies = () => {
         axios
-            .get('http://localhost:3000/main') // 최신 영화를 가져오는 API 호출
+            .get('http://localhost:3000/main')
             .then((response) => {
                 const recentMovies = response.data;
-                console.log("Fetched recent movies:", recentMovies); // 콘솔에 최신 영화 출력
-                setRecentMovies(recentMovies);
+                setRecentMovies(Array.isArray(recentMovies) ? recentMovies : []);
             })
             .catch((error) => {
                 console.error('Request failed:', error);
@@ -143,20 +161,22 @@ function App() {
 
     const fetchWishMovies = () => {
         const userId = localStorage.getItem('userId');
-        axios
-            .get('http://localhost:3000/movie/wish', {
-                params: {
-                    userId: userId,
-                },
-            }) // 보관함 영화를 가져오는 API 호출
-            .then((response) => {
-                const wishMovies = response.data;
-                console.log("Fetched wish movies:", wishMovies); // 콘솔에 보관함 영화 출력
-                setWishMovies(wishMovies);
-            })
-            .catch((error) => {
-                console.error('Request failed:', error);
-            });
+        if (userId) {
+            axios
+                .get('http://localhost:3000/movie/wish', {params: {userId: userId}})
+                .then((response) => {
+                    const wishMovies = response.data;
+                    if (Array.isArray(wishMovies)) {
+                        setWishMovies(wishMovies);
+                    } else {
+                        console.error('Received non-array data:', wishMovies);
+                        setWishMovies([]); // 배열이 아닌 경우 빈 배열 설정
+                    }
+                })
+                .catch((error) => {
+                    console.error('Request failed:', error);
+                });
+        }
     };
 
     useEffect(() => {
@@ -166,25 +186,60 @@ function App() {
     }, []);
 
 
-    const renderMovies = (movies) => {
+    // const renderMovies = (movies) => {
+    //     if (!Array.isArray(movies) || movies.length === 0) {
+    //         return <p>최신 영화가 없습니다.</p>;
+    //     }
+    //
+    //     return movies.map((movie) => (
+    //         <span key={movie.mvId} className="movie">
+    //         <img src={movie.mvImg} alt={movie.mvTitle} className="Poster-img" onClick={() => showMovies(movie.mvId)}/>
+    //         <p>
+    //             {movie.mvTitle}
+    //             <img src={Star} className="star"/>
+    //             ({movie.mvStar})
+    //         </p>
+    //     </span>
+    //     ));
+    // };
+    const renderMovies = (type, movies) => {
+        if (!Array.isArray(movies) || movies.length === 0) {
+            let message = '';
+
+            switch (type) {
+                case 'new':
+                    message = '최신 영화가 없습니다.';
+                    break;
+                case 'recommend':
+                    message = '추천 영화가 없습니다.';
+                    break;
+                case 'wish':
+                    message = '보관함에 영화가 없습니다.';
+                    break;
+                default:
+                    message = '영화 정보가 없습니다.';
+            }
+
+            return <p>{message}</p>;
+        }
+
         return movies.map((movie) => (
             <span key={movie.mvId} className="movie">
-                <img src={movie.mvImg} alt={movie.mvTitle} className="Poster-img" onClick={() => showMovies(movie.mvId)} />
-                <p>
-                    {movie.mvTitle}
-                    <img src={Star} className="star" />
-                    ({movie.mvStar})
-                </p>
-            </span>
+            <img src={movie.mvImg} alt={movie.mvTitle} className="Poster-img" onClick={() => showMovies(movie.mvId)} />
+            <p>
+                {movie.mvTitle}
+                <img src={Star} className="star" />
+                ({movie.mvStar})
+            </p>
+        </span>
         ));
     };
-
     const showMovies = (mvId) => {
         axios
             .get(`/movie/${mvId}`) // 경로 변수를 사용하여 mvId 전달
             .then((response) => {
                 const movieDetails = response.data;
-                navigate(`/movie/${mvId}`, { state: movieDetails });
+                navigate(`/movie/${mvId}`, {state: movieDetails});
             })
             .catch((error) => {
                 console.error('Request failed:', error);
@@ -201,18 +256,13 @@ function App() {
             content = '보관함';
         }
 
+        // Render content
         return (
             <div className={props.type}>
-                {content}
+                <h2>{content}</h2>
                 <div className="new-movies">
                     {/* Display either the loading indicator or the movie list */}
-                    {props.isLoading && props.type === 'recommend' ? <Loading/> : (
-                        props.type === 'wish' && props.movies.length === 0 ? (
-                            <p>보관함에 영화가 없습니다</p>
-                        ) : (
-                            renderMovies(props.movies)
-                        )
-                    )}
+                    {props.isLoading ? <Loading /> : renderMovies(props.type, props.movies)}
                 </div>
             </div>
         );
@@ -230,55 +280,62 @@ function App() {
                 body = topics[i].body;
             }
         }
-        content = <Article title={title} body={body} />;
+        content = <Article title={title} body={body}/>;
     }
 
     const [username, setUserName] = useState('');
     const [userid, setUserId] = useState();
     const [showModal, setShowModal] = useState(false); // Interest 모달 창 상태 추가
 
-    useEffect(() => {
-        const fetchUsername = async () => {
-            try {
-                const response = await axios.get('/user-id', { withCredentials: true });
-                setUserName(response.data);
-                console.log(response.data);
-            } catch (error) {
-                console.error('Error fetching user ID:', error);
-            }
-        };
-
-        fetchUsername();
-    }, []);
+    // useEffect(() => {
+    //     const fetchUsername = async () => {
+    //         try {
+    //             const response = await axios.get('/user-id', { withCredentials: true });
+    //             setUserName(response.data);
+    //             // console.log(response.data);
+    //         } catch (error) {
+    //             console.error('Error fetching user ID:', error);
+    //         }
+    //     };
+    //
+    //     fetchUsername();
+    // }, []);
     useEffect(() => {
         const fetchUserId = async () => {
             try {
                 const response = await axios.get('/getId');
-                const userIdFromApi = response.data;
-                setUserId(userIdFromApi);
-                console.log('User ID:', userIdFromApi);
-                localStorage.setItem('userId', userIdFromApi); // 로컬 스토리지에 사용자 아이디 저장
+                if (response.headers['content-type'].includes('application/json')) {
+                    const userId = response.data;
+                    console.log("User ID:", userId);
+                    setUserId(userId)
+                    // localStorage.setItem(userId);
+                } else {
+                    // 로그인 페이지가 반환된 경우 리디렉션
+                    window.location.href = 'http://localhost:3000/login';
+                }
             } catch (error) {
                 console.error('Error fetching user ID:', error);
+                window.location.href = 'http://localhost:3000/login';
             }
         };
 
         fetchUserId();
     }, []);
+
     const handleInterestModal = () => {
         setShowModal(true);
     };
-    const fetchUserIdByUsername = async () => {
-        try {
-            if (username) {
-                const response = await axios.post('/getUserIdByUsername', { username: username }, { withCredentials: true });
-                setUserId(response.data);
-                console.log('User ID:', response.data);
-            }
-        } catch (error) {
-            console.error('Error fetching user ID:', error);
-        }
-    };
+    // const fetchUserIdByUsername = async () => {
+    //     try {
+    //         if (username) {
+    //             const response = await axios.post('/getUserIdByUsername', { username: username }, { withCredentials: true });
+    //             setUserId(response.data);
+    //             console.log('User ID:', response.data);
+    //         }
+    //     } catch (error) {
+    //         console.error('Error fetching user ID:', error);
+    //     }
+    // };
 
     const handleSearch = () => {
         if (search.trim() === '') {
@@ -293,7 +350,7 @@ function App() {
             .then((response) => {
                 const searchResults = response.data;
                 setSearchResults(searchResults);
-                navigate(`/search/${search}`, { state: searchResults });
+                navigate(`/search/${search}`, {state: searchResults});
             })
             .catch((error) => {
                 console.error('검색 요청 실패:', error);
@@ -305,14 +362,14 @@ function App() {
 
     return (
         <div className="div1">
-            <div id = "div1_input">
-            <input type="text" class="search-type" placeholder="검색하기" value={search} onChange={onChange}/>
-            <input type="button" class="search-button" value="검색" onClick={handleSearch}/>
+            <div id="div1_input">
+                <input type="text" class="search-type" placeholder="검색하기" value={search} onChange={onChange}/>
+                <input type="button" class="search-button" value="검색" onClick={handleSearch}/>
             </div>
             <p/>
-            <Movies type="new" movies={recentMovies} isLoading={isLoading} />
-            <Movies type="recommend" movies={recommendationResults} isLoading={isLoading} />
-            <Movies type="wish" movies={wishMovies} isLoading={isLoading} />
+            <Movies type="new" movies={recentMovies} isLoading={isLoading}/>
+            <Movies type="recommend" movies={recommendationResults} isLoading={isLoading}/>
+            <Movies type="wish" movies={wishMovies} isLoading={isLoading}/>
             {/* Interest 모달 창 */}
 
         </div>

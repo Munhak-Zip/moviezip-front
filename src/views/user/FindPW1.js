@@ -5,7 +5,7 @@ import axios from 'axios';
 const FindPW1 = () => {
     const [id, setId] = useState("");
     const navigate = useNavigate();
-
+    console.log("dddd:::::"+id);
     const gotofindpw2  = async (e) => {
         e.preventDefault();
         try {

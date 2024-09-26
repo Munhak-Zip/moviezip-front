@@ -6,7 +6,7 @@ const Interest = () => {
     const navigate = useNavigate();
     const [selectedGenre, setSelectedGenre] = useState(null);
 
-    const genres = ["한국영화", "SF", "코미디", "해외 영화", "판타지", "로맨스", "애니메이션", "드라마 장르", "스릴러", "액션", "영화", "호러", "다큐멘터리", "음악/뮤지컬", "단편영화"];
+    const genres = ["한국영화", "SF", "코미디", "해외 영화", "판타지", "로맨스", "애니메이션", "드라마", "스릴러", "액션", "영화", "호러", "다큐멘터리", "음악/뮤지컬", "단편영화"];
 
     const toggleGenreSelection = (genre) => {
         setSelectedGenre(genre === selectedGenre ? null : genre);
@@ -16,16 +16,19 @@ const Interest = () => {
         event.preventDefault();
         if (selectedGenre) {
             try {
-                const userId = localStorage.getItem('userId');
+                const userIdString = localStorage.getItem('userId'); // localStorage에서 문자열로 가져옴
+                const userId = parseInt(userIdString, 10); // 10진수로 변환 (Long값으로 간주)
+
+                console.log("userId:::::"+ userId);
                 if (!userId) {
                     console.error("User ID is null or undefined.");
                     return;
                 }
 
-                const interest = { id: Number(userId), genre: selectedGenre };
-                console.log("Sending payload:", interest);
+                const interestDTO  = { userId: userId, genre: selectedGenre };
+                console.log("Sending payload:", interestDTO);
 
-                await axios.post('/addInterest', interest); 
+                await axios.post('/addInterest', interestDTO);
                 navigate('/'); 
             } catch (error) {
                 console.error('Error adding interest:', error);
