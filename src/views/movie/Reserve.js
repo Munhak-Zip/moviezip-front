@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import '../../resources/css/Movie/Reserve.css';
 import axios from 'axios';
 import { useParams, useNavigate, useLocation } from 'react-router-dom';
-
+import Payment from "./Payment";
 const Reserve = () => {
     const navigate = useNavigate();
     const { mvId } = useParams();
@@ -11,6 +11,10 @@ const Reserve = () => {
     const [selectedSeat, setSelectedSeat] = useState(null);
     const [date, setDate] = useState('');
     const [time, setTime] = useState('');
+    const [isPaymentModalOpen, setIsPaymentModalOpen] = useState(false);
+    const openPaymentModal = () => setIsPaymentModalOpen(true);
+    const closePaymentModal = () => setIsPaymentModalOpen(false);
+
 
     useEffect(() => {
         if (!movieDetails) {
@@ -104,7 +108,14 @@ const Reserve = () => {
             날짜 : <input type="date" value={date} onChange={(e) => setDate(e.target.value)}/><br/>
             시간 : <input type="time" value={time} onChange={(e) => setTime(e.target.value)}/><br/>
             <p/><Seat/><br/>
-            <button onClick={handleReservation}>예매하기</button>
+            {/*<button onClick={handleReservation}>예매하기</button>*/}
+            <button onClick={openPaymentModal}>예매하기</button>
+
+            {isPaymentModalOpen && (
+                <Payment
+                    onClose={closePaymentModal} // Pass the close function
+                />
+            )}
         </div>
     );
 }
