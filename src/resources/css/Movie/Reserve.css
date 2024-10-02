@@ -10,7 +10,9 @@ body {
     "VOLM" 0;
 }
 
-.div1 {
+.reserve-div1 {
+    display: flex; /* 가로 정렬을 위해 flex를 사용 */
+    justify-content: center; /* 두 컨테이너를 가로로 중앙 정렬 */
     margin: 0;
     max-height: 800vh;
     margin-left: auto;
@@ -18,7 +20,7 @@ body {
     text-align: center;
 }
 
-.div1 Header a {
+.reserve-div1 Header a {
     font-size: 40px;
     text-decoration: none;
     color: #D1003F;
@@ -27,30 +29,84 @@ body {
 .seatTable {
     margin-left: auto;
     margin-right: auto;
+    width: auto; /* 테이블의 전체 너비를 설정 */
 }
 
 .seatTable table {
     text-align: center;
     border-collapse: collapse;
-    font-size: 8px;
+    font-size: 12px; /* 테이블의 글자 크기를 조절합니다 */
 }
 
 .seatTable th, .seatTable td {
     border: 1px solid white;
-    padding: 2px; /* 셀 내부의 패딩을 줄여 셀의 크기를 작게 만듭니다. */
-    text-align: center; /* 셀 내용을 중앙 정렬합니다. */
+    padding: 2px; /* 셀 내부의 패딩을 조절합니다 */
+    text-align: center;
 }
 
 .seatTable th {
     background-color: #f2f2f2;
 }
 
-/* 선택된 좌석의 배경색을 파란색으로 설정 */
 .seatTable td {
     cursor: pointer;
+    width: 35px; /* 셀의 너비를 늘려줍니다 */
+    height: 30px; /* 셀의 높이를 적절하게 조절합니다 */
+    transition: background-color 0.3s ease; /* 클릭 시 부드러운 색상 전환을 위해 추가한 효과 */
 }
 
 .seatTable td.selected {
-    background-color: red;
+    background-color: #e6004e;
     color: white;
+}
+
+.reserveBtn{
+    width: 200px;
+    height: 70px;
+    background-color: #e6004e; /* 기본 회색 */
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    font-size: 20px;
+    font-weight: bold;
+margin-top: 30px;
+}
+
+.movie-container {
+    display: flex;
+    width: 200px;
+    flex-direction: column; /* 세부 지역을 세로로 나열 */
+    background-color: #333;
+    padding: 10px;
+    margin-top: 10px;
+    border-radius: 10px;
+    height: 700px; /* 전체 높이를 차지하도록 */
+    font-weight: bold;
+    margin-right: 20px;
+    align-items: center; /* 이미지와 텍스트를 중앙으로 정렬 */
+}
+
+.reserve-imgMovie {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 0 auto; /* 이미지 자체를 중앙으로 정렬 */
+}
+.empty-cell {
+    background-color: black !important; /* 배경색을 검정색으로 설정 */
+    border: none !important; /* 테두리를 없앱니다 */
+    width: 10px; /* 필요한 경우 너비를 조절 */
+    height: 20px;
+
+}
+
+.seatName{
+    font-weight: bold;
+    font-size: 30px;
+    margin-bottom: 50px;
+    color: #ef6896;
+}
+
+.seat-container{
+    margin-top: 130px;
 }

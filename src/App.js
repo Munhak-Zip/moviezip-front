@@ -23,6 +23,7 @@ import MovieList from "./views/movie/MovieList";
 import Wish from "./views/wish/Wish"
 import WishMovieList from "./views/wish/WishMovieList"
 import Reserve from "./views/movie/Reserve"
+import ReserveDetail from "./views/movie/ReserveDetail"
 import axios from 'axios';
 import axiosInstance from './axiosConfig';
 import ReviewBoxDetail from "./views/wish/ReviewBoxDetail";
@@ -69,6 +70,10 @@ function App() {
                     <Route
                         path={"/movie/showReserveForm/:mvId"}
                         element={<Reserve/>}
+                    />
+                    <Route
+                        path={"/movie/showReserveDetail/:mvId"}
+                        element={<ReserveDetail/>}
                     />
                     <Route
                         path={"/wish/reviewDetail"}
