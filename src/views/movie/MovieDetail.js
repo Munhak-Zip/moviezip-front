@@ -101,7 +101,7 @@ const MovieDetail = () => {
     };
 
     const showReserve = () => {
-        navigate(`/movie/showReserveForm/${mvId}`, {state: movieDetails});
+        navigate(`/movie/showReserveDetail/${mvId}`, {state: movieDetails});
     };
 
     const toggleBookmark = () => {
