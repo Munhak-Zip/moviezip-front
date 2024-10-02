@@ -1,0 +1,282 @@
+.reserve-detail-container {
+    background-color: #000;
+    color: #fff;
+    width: 100%;
+    height: 100vh;
+    padding: 20px;
+    box-sizing: border-box;
+
+    /* 중앙 정렬을 위한 flex 설정 */
+    display: flex;
+
+    justify-content: center; /* 수평 중앙 정렬 */
+}
+
+.reservation-section {
+    display: flex;
+    align-items: flex-start;
+}
+
+.date-selection, .screen-selection {
+    margin-right: 20px;
+}
+
+.label {
+    background-color: #e6004e;
+    padding: 10px 15px;
+    border-radius: 8px 8px 0 0;
+    text-align: center;
+    font-weight: bold;
+}
+
+.date-selection {
+    background-color: #333;
+    width: 170px;
+    border-radius: 8px;
+    flex: 0.7;
+}
+
+.date-selection input[type="date"] {
+    width: 100%;
+    height: 50px;
+    border: none;
+    outline: none; /* 클릭 시 외곽선 제거 */
+    background-color: #444; /* 배경 색상 변경 */
+    color: #fff; /* 텍스트 색상 */
+    border-radius: 0px 0px 8px 8px; /* 아래쪽 모서리 둥글게 */
+    font-size: 16px; /* 글자 크기 */
+    font-weight: bold;
+    text-align: center; /* 텍스트를 수평으로 중앙 정렬 */
+    padding: 0; /* 기본 padding 제거 */
+    display: flex;
+    align-items: center; /* 세로 중앙 정렬 */
+    justify-content: center; /* 수평 중앙 정렬 */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* 그림자 효과 */
+    transition: background-color 0.3s ease, box-shadow 0.3s ease; /* 마우스 호버 시 부드러운 전환 */
+}
+
+.date-selection input[type="date"]:hover {
+    background-color: #666; /* 호버 시 배경 색상 변경 */
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3); /* 호버 시 그림자 강조 */
+}
+
+
+
+.screen-selection {
+    width: 280px;
+    background-color: #333;
+    border-radius: 8px;
+    flex: 0.8;
+}
+
+.time-slots {
+    display: flex; /* 시간 버튼을 가로로 나열 */
+    gap: 5px; /* 각 시간 버튼 간의 간격 조절 */
+}
+
+.time-selection {
+    background-color: #333;
+    border-radius: 8px;
+    width: 350px;
+    flex: 1;
+}
+
+.theater-info {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 10px;
+}
+
+.time-row {
+    display: flex;
+    justify-content: space-between;
+    padding: 5px 0;
+    border-bottom: 1px solid #444;
+    margin-top: 5px;
+}
+
+.time-btn {
+    background-color: #666; /* 기본 배경색 */
+    padding: 10px 20px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease; /* 부드러운 전환 효과 */
+    color: #fff; /* 텍스트 색상 */
+    font-weight: bold;
+    margin-top: 24px;
+    margin-left: 10px;
+}
+
+.time-btn:hover {
+    background-color: #ff4b8a; /* 마우스 호버 시 색상 */
+}
+
+.selected-time {
+    background-color: #e6004e; /* 선택된 시간 배경색 핑크 */
+    color: #fff; /* 선택된 시간의 텍스트 색상 */
+}
+
+.screen-name{
+    font-weight: bold;
+    font-size: 19px;
+    margin-left: 10px;
+}
+.screen-seat{
+    margin-left: 7px;
+    font-weight: bold;
+    color: #888;
+    font-size: 15px;
+}
+.screen-details {
+    display: flex;
+    align-items: center;
+}
+.screen{
+    flex-direction: column;
+}
+
+.theater-info {
+    display: flex;
+    flex-direction: column;
+}
+
+/* date-info 안의 요소들을 가로로 나열 */
+.date-info {
+    display: flex; /* 가로로 나열 */
+    margin-bottom: 10px;
+}
+
+.region-container {
+    display: flex;
+    width: 120px;
+    flex-direction: column; /* 지역 목록을 세로로 나열 */
+    background-color: #333;
+    margin-top: 8px;
+    margin-left: 7px;
+    border-radius: 10px;
+    height: 100%; /* 전체 높이를 차지하도록 */
+}
+
+.region {
+    padding: 20px 20px;
+    border-radius: 10px 0px 0px 10px;
+    margin: 2px 0;
+    cursor: pointer;
+    transition: background-color 0.3s, color 0.3s;
+    text-align: center;
+    color: #fff;
+}
+
+.region.selected {
+    background-color:#666;
+    font-weight: bold;
+    color: #fff;
+}
+
+/* 세부 지역 컨테이너 */
+.sub-region-container {
+    display: flex;
+    width: 100px;
+    flex-direction: column; /* 세부 지역을 세로로 나열 */
+    background-color: #666;
+    padding: 10px;
+    margin-top: 10px;
+    border-radius: 0px 10px 10px 10px;
+    height: 700px; /* 전체 높이를 차지하도록 */
+    font-weight: bold;
+    overflow-y: auto;
+}
+
+/* 스크롤바 너비 조정 */
+.sub-region-container::-webkit-scrollbar {
+    width: 6px; /* 스크롤바의 너비 */
+}
+
+/* 스크롤바 트랙 스타일 */
+.sub-region-container::-webkit-scrollbar-track {
+    background: #444; /* 스크롤바 트랙 배경색 */
+    border-radius: 10px;
+}
+
+/* 스크롤바 핸들 스타일 */
+.sub-region-container::-webkit-scrollbar-thumb {
+    background: #888; /* 스크롤바 핸들 색상 */
+    border-radius: 10px;
+}
+
+/* 스크롤바 핸들에 마우스 오버 시 색상 */
+.sub-region-container::-webkit-scrollbar-thumb:hover {
+    background: #555; /* 마우스 오버 시 색상 */
+}
+
+.sub-region {
+    padding: 10px;
+    margin: 5px 0;
+    color: #fff;
+    text-align: center;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.sub-region.sub-selected {
+    background-color: #e6004e; /* 핑크색 배경 */
+    color: #fff;
+}
+
+.sub-region:hover {
+    background-color: #ff4b8a; /* 호버 시 밝은 핑크색 */
+}
+
+.next-button-container {
+    margin-top: -50px; /* time-selection보다 10px 위에 배치 */
+
+}
+
+.next-button {
+    width: 100px;
+    height: 40px;
+    background-color: #555; /* 기본 회색 */
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: not-allowed;
+    transition: background-color 0.3s ease;
+
+    font-size: 18px;
+    font-weight: bold;
+    margin-top: 10px;
+    margin-right: -60px;
+}
+
+.next-button.active {
+    background-color: #e6004e; /* 모두 선택되면 핑크색 */
+    cursor: pointer;
+}
+
+.message{
+    padding: 20px;
+    margin-top: 10px;
+    font-size: 18px;
+    font-weight: bold;
+    text-align: center;
+}
+
+.time-slots {
+    display: flex; /* Arrange time slots in a row */
+    gap: 10px; /* Add some space between each slot */
+    flex-wrap: wrap; /* Wrap to the next line if the items exceed the container width */
+}
+
+.time-slot-container {
+    display: flex; /* Display each slot and remaining seats side by side */
+    align-items: center; /* Align items vertically centered */
+
+}
+.remaining-seats{
+    margin-left: 5px;
+    margin-top: 35px;
+    font-weight: bold;
+    font-size: 13px;
+    color: #e383a5;
+}
