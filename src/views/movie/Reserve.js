@@ -93,31 +93,7 @@ const Reserve = () => {
         if (!selectedSeat) {
             alert("좌석을 선택해주세요.");
         } else {
-            /*  결제창으로 넘겨주세여 */
-            
-            /*
-            const userId = localStorage.getItem('userId');
-            const reservationData = {
-                mvId: mvId,
-                id: userId,
-                seat: selectedSeat,
-                dateR: date,
-                time
-            };
-
-            console.log('Sending reservation data:', reservationData);
-
-            /*
-            axios.post('/movie/reserve', reservationData)
-                .then(response => {
-                    console.log('Reservation response:', response.data);
-                    alert("예매가 완료되었습니다. 선택된 좌석: " + selectedSeat);
-                    navigate('/user/mypage', { state: { reservationDetails: response.data } });
-                })
-                .catch(error => {
-                    console.error('Reservation failed:', error);
-                    alert("예매에 실패했습니다. 다시 시도해주세요.");
-                });*/
+            setIsPaymentModalOpen(true);
         }
     }
 
@@ -146,23 +122,17 @@ const Reserve = () => {
                 <div>
                     <button className='reserveBtn' onClick={handleReservation}>결제하기</button>
                 </div>
+
+                {isPaymentModalOpen && (
+                    <div className="modal-overlay">
+                        <div className="modal-content">
+                            <Payment onClose={closePaymentModal} mvId={mvId} mvTitle={mvTitle} selectedSubRegion={selectedSubRegion} selectedDate={selectedDate} startTime={startTime} endTime={endTime} seats={seats} selectedSeat={selectedSeat}/>
+                        </div>
+                    </div>
+                )}
             </div>
 
         </div>
-
-        <div className="div1">
-            영화명 : {movieDetails.mvTitle} <br/>
-            날짜 : <input type="date" value={date} onChange={(e) => setDate(e.target.value)}/><br/>
-            시간 : <input type="time" value={time} onChange={(e) => setTime(e.target.value)}/><br/>
-            <p/><Seat/><br/>
-            {/*<button onClick={handleReservation}>예매하기</button>*/}
-            <button onClick={openPaymentModal}>예매하기</button>
-
-            {isPaymentModalOpen && (
-                <Payment
-                    onClose={closePaymentModal} // Pass the close function
-                />
-            )}
         </div>
     );
 }
