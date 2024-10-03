@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import '../../resources/css/Movie/Reserve.css';
 import axios from 'axios';
 import { useParams, useNavigate, useLocation } from 'react-router-dom';
-
+import Payment from "./Payment";
 const Reserve = () => {
     const navigate = useNavigate();
     const { mvId } = useParams();
@@ -12,6 +12,10 @@ const Reserve = () => {
     const [date, setDate] = useState(selectedDate || '');
     const [time, setTime] = useState('');
     const [movieDetails, setMovieDetails] = useState(location.state || null);
+    const [isPaymentModalOpen, setIsPaymentModalOpen] = useState(false);
+    const openPaymentModal = () => setIsPaymentModalOpen(true);
+    const closePaymentModal = () => setIsPaymentModalOpen(false);
+
 
     useEffect(() => {
         if (!movieDetails) {
@@ -89,31 +93,7 @@ const Reserve = () => {
         if (!selectedSeat) {
             alert("좌석을 선택해주세요.");
         } else {
-            /*  결제창으로 넘겨주세여 */
-            
-            /*
-            const userId = localStorage.getItem('userId');
-            const reservationData = {
-                mvId: mvId,
-                id: userId,
-                seat: selectedSeat,
-                dateR: date,
-                time
-            };
-
-            console.log('Sending reservation data:', reservationData);
-
-            /*
-            axios.post('/movie/reserve', reservationData)
-                .then(response => {
-                    console.log('Reservation response:', response.data);
-                    alert("예매가 완료되었습니다. 선택된 좌석: " + selectedSeat);
-                    navigate('/user/mypage', { state: { reservationDetails: response.data } });
-                })
-                .catch(error => {
-                    console.error('Reservation failed:', error);
-                    alert("예매에 실패했습니다. 다시 시도해주세요.");
-                });*/
+            setIsPaymentModalOpen(true);
         }
     }
 
@@ -142,10 +122,17 @@ const Reserve = () => {
                 <div>
                     <button className='reserveBtn' onClick={handleReservation}>결제하기</button>
                 </div>
+
+                {isPaymentModalOpen && (
+                    <div className="modal-overlay">
+                        <div className="modal-content">
+                            <Payment onClose={closePaymentModal} mvId={mvId} mvTitle={mvTitle} selectedSubRegion={selectedSubRegion} selectedDate={selectedDate} startTime={startTime} endTime={endTime} seats={seats} selectedSeat={selectedSeat}/>
+                        </div>
+                    </div>
+                )}
             </div>
 
         </div>
-
         </div>
     );
 }
