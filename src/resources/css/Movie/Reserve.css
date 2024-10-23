@@ -151,3 +151,14 @@ margin-top: 30px;
 body.modal-open {
     overflow: hidden;
 }
+
+.reserved {
+    background-color: #9d9c9c !important;
+    color: #4d4d4d !important;
+    font-weight: bold;
+    cursor: not-allowed !important;
+}
+
+.selected {
+    background-color: green;
+}
