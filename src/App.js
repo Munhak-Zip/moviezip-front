@@ -2,7 +2,6 @@
 import React, {useEffect, useState} from 'react';
 import {BrowserRouter, Routes, Route} from "react-router-dom";
 import Main from './views/Main';
-import Minyoung from "./page/user/Minyoung";
 import Login from "./views/user/Login";
 import Logout from "./views/user/Logout";
 import Moviedetail from "./views/movie/MovieDetail";
@@ -18,7 +17,7 @@ import FindPw2 from "./views/user/FindPW2";
 import SignUp from "./views/user/SignUp";
 import FirstCheckInterests from "./views/user/FirstCheckInterest";
 import Header from "./components/common/header";
-
+import Admin from "./views/admin/Admin";
 import MovieList from "./views/movie/MovieList";
 import Wish from "./views/wish/Wish"
 import WishMovieList from "./views/wish/WishMovieList"
@@ -29,16 +28,14 @@ import axiosInstance from './axiosConfig';
 import ReviewBoxDetail from "./views/wish/ReviewBoxDetail";
 import MyReviewBoxUpdate from "./views/wish/MyReviewBoxUpdate";
 import SearchMovie from "./views/movie/SearchMovie";
+import ChatRooms from "./views/chat/ChatRooms";
+import ChatRoom from "./views/chat/ChatRoom";
 function App() {
     return (
         <BrowserRouter>
             <div className="App">
                 <Header />
                 <Routes>
-                    <Route
-                        path={"/login/minyoung"}
-                        element={<Minyoung/>}
-                    />
                     <Route
                         path={"/login"}
                         element={<Login/>}
@@ -123,7 +120,12 @@ function App() {
                         path={"/search/:mvTitle"}
                         element={<SearchMovie />}
                     />
-
+                    <Route
+                        path={"/admin"}
+                        element={<Admin />}
+                    />
+                    <Route path="/ChatRooms" element={<ChatRooms />} />
+                    <Route path="/chat/:roomId" element={<ChatRoom />} />
                 </Routes>
 
             </div>

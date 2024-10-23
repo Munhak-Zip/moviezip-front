@@ -37,10 +37,15 @@ const Sidebar = ({width = 280, children, isLoggedIn}) => {
 
     const navigate = useNavigate();
 
-    const goToMypage = () => {
+    const goToChatRoom = () => {
         setX(width);
         setOpen(false);
         navigate("/user/mypage");
+    };
+    const goToMypage = () => {
+        setX(width);
+        setOpen(false);
+        navigate("/ChatRoom");
     };
 
     const goToLogout = () => {
@@ -100,6 +105,9 @@ const Sidebar = ({width = 280, children, isLoggedIn}) => {
                         <br />
                         <div className="sidebar-text2" onClick={goToMypage}>
                             마이페이지
+                        </div>
+                        <div className="sidebar-text2" onClick={goToChatRoom}>
+                            고객센터
                         </div>
                         <br />
                         <div className="sidebar-text2" onClick={goToLogout}>
