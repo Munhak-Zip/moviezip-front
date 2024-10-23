@@ -35,6 +35,11 @@ const Header = (props) => {
         navigate("/user/mypage");
         closeSidebar();
     }
+    const goToChatRoom = () => {
+        closeSidebar();
+        navigate("/ChatRooms");
+
+    };
 
     const goToMain = () => {
         navigate("/");
@@ -89,6 +94,10 @@ const Header = (props) => {
                             <br />
                             <div className="sidebar-text" onClick={goToMypage}>
                                 마이페이지
+                            </div>
+                            <br />
+                            <div className="sidebar-text2" onClick={goToChatRoom}>
+                                고객센터
                             </div>
                             <br />
                             <div className="sidebar-text" onClick={goToLogout}>

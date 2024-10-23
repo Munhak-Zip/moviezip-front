@@ -43,7 +43,7 @@ const Login = () => {
             const response = await axiosInstance.post("/loginProc", loginDTO, {
 
                 headers: {
-                    'Content-Type': 'application/x-www-form-urlencoded',
+                    'Content-Type': 'application/json',
                 },
                 withCredentials: true, // 쿠키 기반 인증 정보를 포함
             });
