@@ -3,6 +3,8 @@ import '../../resources/css/Movie/Reserve.css';
 import axios from 'axios';
 import { useParams, useNavigate, useLocation } from 'react-router-dom';
 import Payment from "./Payment";
+import SockJS from 'sockjs-client';
+import { Stomp } from '@stomp/stompjs';
 const Reserve = () => {
     const navigate = useNavigate();
     const { mvId } = useParams();
@@ -11,6 +13,7 @@ const Reserve = () => {
     const [selectedSeat, setSelectedSeat] = useState(null);
     const [date, setDate] = useState(selectedDate || '');
     const [time, setTime] = useState('');
+    const [reservedSeats, setReservedSeats] = useState([]);
     const [movieDetails, setMovieDetails] = useState(location.state || null);
     const [isPaymentModalOpen, setIsPaymentModalOpen] = useState(false);
     const openPaymentModal = () => setIsPaymentModalOpen(true);
@@ -31,7 +34,51 @@ const Reserve = () => {
         }
     }, [mvId, movieDetails]);
 
+    useEffect(() => {
+        // WebSocket 연결 설정
+        const socket = new SockJS('http://localhost:8080/chat');
+        const stompClient = Stomp.over(socket);
+        stompClient.connect({}, () => {
+            console.log("WebSocket connected");
+        }, (error) => {
+            console.log("WebSocket connection error:", error);
+        });
+        stompClient.connect({}, () => {
+            // 좌석 예약 업데이트 메시지를 구독
+            const correctedTime = startTime.replace(":", "");
+            stompClient.subscribe(`/topic/reservation/${mvId}/${selectedSubRegion}/${selectedDate}/${correctedTime}`, (message) => {
+                console.log("Received message:", message.body); // 메시지 로그 출력
+                const seatUpdate = JSON.parse(message.body);
+                setReservedSeats((prevReservedSeats) => {
+                    // 중복 좌석 방지를 위해 새로운 좌석만 추가
+                    if (!prevReservedSeats.includes(seatUpdate.seat)) {
+                        return [...prevReservedSeats, seatUpdate.seat];
+                    }
+                    return prevReservedSeats;
+                });
+            });
+        });
+
+        // 이미 예약된 좌석 정보를 서버로부터 가져옴 (Axios 사용)
+       axios.get(`/movie/reservedSeats/${mvId}?region=${selectedSubRegion}&date=${selectedDate}&time=${startTime}`)
+            .then(response => {
+                setReservedSeats(response.data); // 서버로부터 받은 좌석 정보를 배열에 설정
+            })
+            .catch(error => {
+                console.error("Error fetching reserved seats:", error);
+            });
+
+        return () => {
+            // 컴포넌트가 언마운트될 때 WebSocket 연결 해제
+            stompClient.disconnect();
+        };
+    }, [mvId, selectedSubRegion, selectedDate, startTime]);
+
     function Seat() {
+        function isSeatReserved(seatId) {
+            return reservedSeats.includes(seatId);
+        }
+
         const rows = Math.ceil(seats / 20); // 필요한 행 수를 seats 수에 따라 결정
         const cols = Math.min(seats, 20); // 열 수는 최대 20개까지
         const rowLabels = 'ABCDEFGHIJ'.split(''); // 최대 10개의 행에 대한 라벨 설정
@@ -58,8 +105,8 @@ const Reserve = () => {
                 tableCells.push(
                     <td
                         key={seatId}
-                        className={selectedSeat === seatId ? 'selected' : ''}
-                        onClick={() => handleSeatClick(seatId)}
+                        className={isSeatReserved(seatId) ? 'reserved' : (selectedSeat === seatId ? 'selected' : '')}
+                        onClick={() => !isSeatReserved(seatId) && handleSeatClick(seatId)}
                     >
                         {seatId}
                     </td>
@@ -76,16 +123,13 @@ const Reserve = () => {
         }
 
         return (
-            <div>
-
             <div className="seatTable">
                 <table>
                     <tbody>
-                        {tableRows}
-                        </tbody>
-                    </table>
+                    {tableRows}
+                    </tbody>
+                </table>
             </div>
-    </div>
         );
     }
 
