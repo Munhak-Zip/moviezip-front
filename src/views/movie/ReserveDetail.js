@@ -217,7 +217,7 @@ const ReserveDetail = () => {
                                                     >
                                                         {slot.startTime}
                                                     </div>
-                                                    <div className="remaining-seats">({slot.remainingSeats}석)</div>
+
                                                 </div>
                                             ))}
                                         </div>
@@ -238,9 +238,6 @@ const ReserveDetail = () => {
                         다음
                     </button>
 
-                    <div>
-                        {selectedTime && <div>선택된 시간: {selectedTime}</div>}
-                    </div>
                 </div>
             </div>
         </div>
