@@ -8,6 +8,8 @@ import Modal from '../../components/Modal/Modal'
 import Interest from '../../components/interest/Interest';
 import Modalcss from '../../resources/css/Modal/Modal.css';
 import Interestcss from '../../resources/css/Interest/interest.css';
+import { jwtDecode } from "jwt-decode";  // jwtDecode로 수정
+
 
 const Login = () => {
     const [username, setUsername] = useState("");
@@ -16,20 +18,20 @@ const Login = () => {
     const [userid, setUserId] = useState();
     const [showModal, setShowModal] = useState(false); // Interest 모달 창 상태 추가
 
-    useEffect(() => {
-        const checkAuthentication = async () => {
-            try {
-                const response = await axiosInstance.get("/auth-check", { withCredentials: true });
-                if (response.data == 200) {
-                    alert("이미 로그인된 사용자입니다.");
-                    navigate("/"); // Redirect to home or any other page
-                }
-            } catch (error) {
-                console.error("Authentication check failed:", error);
-            }
-        };
-        checkAuthentication();
-    }, [navigate]);
+    // useEffect(() => {
+    //     const checkAuthentication = async () => {
+    //         try {
+    //             const response = await axiosInstance.get("/auth-check", { withCredentials: true });
+    //             if (response.data == 200) {
+    //                 alert("이미 로그인된 사용자입니다.");
+    //                 navigate("/"); // Redirect to home or any other page
+    //             }
+    //         } catch (error) {
+    //             console.error("Authentication check failed:", error);
+    //         }
+    //     };
+    //     checkAuthentication();
+    // }, [navigate]);
 
     const handleSubmit = async (event) => {
         event.preventDefault();
@@ -40,30 +42,32 @@ const Login = () => {
         };
 
         try {
-            const response = await axiosInstance.post("/loginProc", loginDTO, {
-
+            const response = await axiosInstance.post("/authenticate", loginDTO, {
                 headers: {
-                    'Content-Type': 'application/x-www-form-urlencoded',
-                },
-                withCredentials: true, // 쿠키 기반 인증 정보를 포함
+                    "Content-Type": "application/json",  // 요청 헤더 설정
+                }
             });
             if (response.status === 200) {
+                const jwt = response.data.jwt;  // 로그인 성공 시 받은 JWT
+                localStorage.setItem("jwt", jwt);  // JWT를 로컬스토리지에 저장
 
-                const userIdResponse = await axios.get('/getId');
-                if (userIdResponse.status === 200) {
-                    const userId = userIdResponse.data; // 서버에서 받은 userId
-                    alert(userId);
-                    localStorage.setItem("userId",userId);
-                    // userId를 사용해 Interest 존재 여부 확인
-                    const interestResponse = await axios.post('/checkExistInterestById', { id: userId });
+                // JWT에서 userId 추출
+                const decodedToken = jwtDecode(jwt);
+                const userId = decodedToken.userId;
+                alert("UserId: " + userId);  // userId 확인
 
-                    if (interestResponse.data) {
-                        navigate("/");
-                    } else {
-                        setShowModal(true);
+                localStorage.setItem("userId", userId);  // userId를 로컬스토리지에 저장
+
+                // 관심사 존재 여부 확인
+                const interestResponse = await axiosInstance.post('/checkExistInterestById', { id: userId }, {
+                    headers: {
+                        "Authorization": `Bearer ${jwt}`,  // JWT 토큰을 Authorization 헤더에 포함
                     }
+                });
+                if (interestResponse.data) {
+                    navigate("/");  // 관심사가 있으면 홈으로 이동
                 } else {
-                    console.error("Error fetching user ID:", userIdResponse.data);
+                    setShowModal(true);  // 관심사가 없으면 모달을 띄움
                 }
             } else {
                 console.error("Error during login:", response.data);

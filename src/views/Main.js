@@ -9,7 +9,11 @@ import Modal from '../components/Modal/Modal';
 import Interest from '../components/interest/Interest';
 
 function Header(props) {
+    const token = localStorage.getItem('jwt');
+    const headers = token ? { Authorization: `Bearer ${token}` } : {};
+
     console.log('props', props, props.title);
+
     return (
         <header>
             <h1>
@@ -98,6 +102,7 @@ function App() {
     const [wishMovies, setWishMovies] = useState([]);
     const [isLoading, setIsLoading] = useState(true); // 로딩 상태 추가
     const [isLoggedIn, setIsLoggedIn] = useState(false); // 로그인 상태 관리
+    const token = localStorage.getItem('jwt');
 
     useEffect(() => {
         const userId = localStorage.getItem('userId');
@@ -125,13 +130,15 @@ function App() {
     };
 
     const fetchRecommendations = () => {
-        //const userId = 3; // 예시로 사용자 ID를 지정
-        const userId = localStorage.getItem('userId');
-        if (userId) {
+        const token = localStorage.getItem('jwt');
+        if (token) {
             axios
                 .get('/main/recommend', {
+                    headers: {
+                        Authorization: `Bearer ${token}`, // Add token to headers
+                    },
                     params: {
-                        userId: userId,
+                        userId: localStorage.getItem('userId'),
                     },
                 })
                 .then((response) => {
@@ -148,8 +155,11 @@ function App() {
     };
 
     const fetchRecentMovies = () => {
+
         axios
-            .get('http://localhost:3000/main')
+            .get('http://localhost:3000/main', {
+                headers: { Authorization: `Bearer ${token}` }
+            })
             .then((response) => {
                 const recentMovies = response.data;
                 setRecentMovies(Array.isArray(recentMovies) ? recentMovies : []);
@@ -163,7 +173,12 @@ function App() {
         const userId = localStorage.getItem('userId');
         if (userId) {
             axios
-                .get('http://localhost:3000/movie/wish', {params: {userId: userId}})
+                .get('http://localhost:3000/movie/wish', {
+                    headers: {
+                        Authorization: `Bearer ${token}`, // Add token to headers
+                    },
+                    params: {userId: userId}},
+                    )
                 .then((response) => {
                     const wishMovies = response.data;
                     if (Array.isArray(wishMovies)) {
@@ -236,7 +251,9 @@ function App() {
     };
     const showMovies = (mvId) => {
         axios
-            .get(`/movie/${mvId}`) // 경로 변수를 사용하여 mvId 전달
+            .get(`/movie/${mvId}`, {
+                headers: { Authorization: `Bearer ${token}` }
+            }) // 경로 변수를 사용하여 mvId 전달
             .then((response) => {
                 const movieDetails = response.data;
                 navigate(`/movie/${mvId}`, {state: movieDetails});
@@ -300,27 +317,29 @@ function App() {
     //
     //     fetchUsername();
     // }, []);
-    useEffect(() => {
-        const fetchUserId = async () => {
-            try {
-                const response = await axios.get('/getId');
-                if (response.headers['content-type'].includes('application/json')) {
-                    const userId = response.data;
-                    console.log("User ID:", userId);
-                    setUserId(userId)
-                    // localStorage.setItem(userId);
-                } else {
-                    // 로그인 페이지가 반환된 경우 리디렉션
-                    window.location.href = 'http://localhost:3000/login';
-                }
-            } catch (error) {
-                console.error('Error fetching user ID:', error);
-                window.location.href = 'http://localhost:3000/login';
-            }
-        };
-
-        fetchUserId();
-    }, []);
+    // useEffect(() => {
+    //     const fetchUserId = async () => {
+    //         try {
+    //             const response = await axios.get('/getId', {
+    //                 headers: { Authorization: `Bearer ${token}` }
+    //             });
+    //             if (response.headers['content-type'].includes('application/json')) {
+    //                 const userId = response.data;
+    //                 console.log("User ID:", userId);
+    //                 setUserId(userId)
+    //                 // localStorage.setItem(userId);
+    //             } else {
+    //                 // 로그인 페이지가 반환된 경우 리디렉션
+    //                 window.location.href = 'http://localhost:3000/login';
+    //             }
+    //         } catch (error) {
+    //             console.error('Error fetching user ID:', error);
+    //             window.location.href = 'http://localhost:3000/login';
+    //         }
+    //     };
+    //
+    //     fetchUserId();
+    // }, []);
 
     const handleInterestModal = () => {
         setShowModal(true);
@@ -346,7 +365,9 @@ function App() {
         setIsLoading(true); // 검색 시작 시 로딩 상태를 true로 설정
 
         axios
-            .get(`/search/${search}`)
+            .get(`/search/${search}`, {
+                headers: { Authorization: `Bearer ${token}` }
+            })
             .then((response) => {
                 const searchResults = response.data;
                 setSearchResults(searchResults);
