@@ -1,5 +1,4 @@
-<<<<<<< HEAD
-# ⭐Munhak.Zip_Front
+# ⭐moviezip-front
 
 더 자세한 깃허브 룰 설명은 팀 노션 참고. 
 
@@ -46,7 +45,3 @@ pr시 자신이 작업한 내용 자세하게 써주어야 함!!
 예진 ← 민영 ← 다윤 ← 미현 ex( 민영이가 예진이 PR merge, 예진이가 미현 PR merge
 
 merge 할 때 delete branch 해주세용
-=======
-# MovieZip_FE
-소프트웨어 경진대회 - 프론트
->>>>>>> 0664eee293b61ad068f61a11d28af74b643b67a7
