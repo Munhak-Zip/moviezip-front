@@ -3,18 +3,23 @@ import { Client, Stomp } from '@stomp/stompjs';
 import axios from 'axios';
 import SockJS from 'sockjs-client';
 import { useParams } from 'react-router-dom';
-
+import axiosInstance, { setupAxiosInterceptor } from '../../axiosConfig';
 const ChatRoom = () => {
     const { roomId } = useParams();
     const [messages, setMessages] = useState([]);
     const [newMessage, setNewMessage] = useState('');
     const [client, setClient] = useState(null);
-    const [sessionId, setSessionId] = useState('');
+    // const [sessionId, setSessionId] = useState('');
     const userId = localStorage.getItem("userId");
+    const accessToken = localStorage.getItem("accessToken");
     const [username, setUserName] = useState("");
 
     const fetchUserInfo = (userId) => {
-        axios.get('/mypage/user', { params: { userId: userId } })
+        axiosInstance.get('/mypage/user', {
+            headers: {
+                'Authorization': `Bearer ${accessToken}`  // 'Bearer '와 token을 함께 전달
+            }
+        })
             .then(response => {
                 const data = response.data;
                 setUserName(data.nickname);
@@ -25,20 +30,6 @@ const ChatRoom = () => {
             });
     };
 
-    useEffect(() => {
-        const fetchSessionId = async () => {
-            try {
-                const response = await axios.get('http://localhost:8080/sessionId', {
-                    withCredentials: true
-                });
-                setSessionId(response.data.sessionId);
-            } catch (error) {
-                console.error('Error fetching session ID:', error);
-            }
-        };
-
-        fetchSessionId();
-    }, []);
 
     useEffect(() => {
         const socket = new SockJS('http://localhost:8080/chat');
@@ -76,7 +67,7 @@ const ChatRoom = () => {
     const fetchMessages = async () => {
         try {
             console.log("Fetching messages for roomId: " + roomId);
-            const response = await axios.get(`http://localhost:8080/chat/room/${roomId}/messages`);
+            const response = await axiosInstance.get(`http://localhost:8080/chat/room/${roomId}/messages`);
 
             if (response.status === 200) {
                 console.log("Response data", response.data);
@@ -96,11 +87,12 @@ const ChatRoom = () => {
     const handleSendMessage = async () => {
         if (newMessage.trim() && client) {
             const message = {
-                chatRoom: { id: roomId },
-                type: "TALK",
-                userId: userId,
-                content: newMessage,
-                timestamp: new Date().toISOString(),
+                type: "TALK",  // Message type (could also be dynamic based on message type)
+                userId: userId,  // The ID of the authenticated user
+                sender: username || "이용자",  // The username of the sender (authenticated or anonymous)
+                content: newMessage,  // The message content
+                timestamp: new Date().toISOString(),  // Current timestamp in ISO format
+                chatRoomId: roomId,  // The chat room ID
             };
 
             try {
@@ -108,7 +100,7 @@ const ChatRoom = () => {
                     destination: `/app/send/message`,
                     body: JSON.stringify(message),
                     headers: {
-                        sessionId: sessionId,
+                        Authorization: `Bearer ${accessToken}`
                     },
                 });
 

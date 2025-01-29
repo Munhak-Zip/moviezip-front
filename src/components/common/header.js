@@ -14,12 +14,22 @@ const Header = (props) => {
 
     const toggleSidebar = async () => {
         if (!isSidebarOpen) {
-            // 사이드바를 열 때 로그인 상태를 확인
+            // JWT를 Authorization 헤더에 포함하여 서버로 요청
             try {
-                const response = await axiosInstance.get("/auth-check", { withCredentials: true });
-                setIsLoggedIn(response.data);
+                const token = localStorage.getItem('accessToken');  // 로컬 스토리지에서 JWT 가져오기
+                if (token) {
+                    const response = await axiosInstance.get("/auth-check", {
+                        headers: {
+                            Authorization: `Bearer ${token}`,  // Authorization 헤더에 토큰 추가
+                        },
+                    });
+                    setIsLoggedIn(response.data);  // 서버 응답에 따라 로그인 상태 업데이트
+                } else {
+                    setIsLoggedIn(false);  // 토큰이 없으면 로그인 상태 false로 설정
+                }
             } catch (error) {
                 console.error("Authentication check failed:", error);
+                setIsLoggedIn(false);  // 요청 실패 시 로그인 상태 false로 설정
             }
         }
         setSidebarOpen(!isSidebarOpen);
@@ -35,10 +45,10 @@ const Header = (props) => {
         navigate("/user/mypage");
         closeSidebar();
     }
-    const goToChatRoom = () => {
-        closeSidebar();
-        navigate("/ChatRooms");
 
+    const goToChatRoom = () => {
+        navigate("/ChatRooms");
+        closeSidebar();
     };
 
     const goToMain = () => {
@@ -95,7 +105,6 @@ const Header = (props) => {
                             <div className="sidebar-text" onClick={goToMypage}>
                                 마이페이지
                             </div>
-                            <br />
                             <div className="sidebar-text2" onClick={goToChatRoom}>
                                 고객센터
                             </div>

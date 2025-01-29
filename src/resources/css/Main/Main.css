@@ -75,7 +75,7 @@
 
     .div1 {
         margin: 0;
-        max-height: 800px;
+        /*max-height: 800px;*/
         margin-left: auto;
         margin-right: auto;
         background-color: black;

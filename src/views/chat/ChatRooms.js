@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom'; // Import useNavigate
+import axiosInstance from '../../axiosConfig';
 
 const ChatRooms = () => {
     const [userId, setUserId] = useState('');
@@ -9,37 +10,25 @@ const ChatRooms = () => {
     const [chatRooms, setChatRooms] = useState([]);
     const [error, setError] = useState('');
     const navigate = useNavigate();
-    const [adminId,setAdminId] =useState('');
+    const token = localStorage.getItem('accessToken'); // Get JWT token from localStorage
 
     useEffect(() => {
-        const id = localStorage.getItem("userId");
+        const id = localStorage.getItem('userId');
 
         if (id) {
             setUserId(id);
-            console.log("유저 아이디: ", id);
+            console.log('유저 아이디: ', id);
             handleFetchChatRooms(id); // Fetch chat room list
         }
-        const fetchAdminId = async () => {
-            try {
-                const response = await axios.get('/api/getAdminId');
-                if (response.status === 200) {
-                    console.log("어드민 아이디=" + response.data);
-                    setAdminId(response.data);
-                }
-            } catch (error) {
-                console.error('Error fetching admin ID:', error);
-            }
-        };
-
-        fetchAdminId();
-    }, [adminId]);
+    }, []);
 
     // 채팅방 생성
     const handleCreateChatRoom = async () => {
-        console.log("Creating chat room with User ID:", userId, "Admin ID:", adminId);
         try {
             const response = await axios.post('/chat/createRoom', null, {
-                params: { userId,adminId },
+                headers: {
+                    'Authorization': `Bearer ${token}`, // Include JWT token in the headers
+                },
             });
             setChatRoom(response.data);
             navigate(`/chat/${response.data.id}`);
@@ -50,6 +39,7 @@ const ChatRooms = () => {
             setError('Failed to create chat room.');
         }
     };
+
     useEffect(() => {
         if (userId) {
             handleFetchChatRooms(userId);
@@ -58,20 +48,15 @@ const ChatRooms = () => {
 
     // 채팅방 목록 조회
     const handleFetchChatRooms = async (fetchedUserId) => {
-        console.log("어드민 fetchedUserId =", fetchedUserId, "Type:", typeof fetchedUserId);
-        console.log("어드민 adminId =", adminId, "Type:", typeof adminId);
+        console.log('어드민 fetchedUserId =', fetchedUserId, 'Type:', typeof fetchedUserId);
 
         try {
-            if (fetchedUserId === String(adminId)) {
-                console.log("어드민 adminId=", adminId);
-                setIsAdmin(true);
-            } else {
-                setIsAdmin(false);
-            }
 
-            // Now that we have set isAdmin, we can fetch chat rooms
-            const response = await axios.get('/chat', {
-                params: { userId: fetchedUserId || userId, isAdmin }
+            // Fetch chat rooms with JWT token in header
+            const response = await axiosInstance.get('/chat', {
+                headers: {
+                    'Authorization': `Bearer ${token}`, // Include JWT token in the headers
+                },
             });
             setChatRooms(response.data);
             setError('');
@@ -80,9 +65,10 @@ const ChatRooms = () => {
             setError('Failed to fetch chat rooms.'); // Set error message
         }
     };
+
     // 해당 채팅방으로 이동
     const handleRoomClick = (roomId) => {
-        console.log("룸아이디:", roomId);
+        console.log('룸아이디:', roomId);
         navigate(`/chat/${roomId}`);
     };
 
